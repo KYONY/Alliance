@@ -1,32 +1,33 @@
 from mongo import collection_stucture, collection_additives
 
-def parses_content(string):
-	"""Принимает строку и отдает отдельные элементы списка в виде одиночных слов во вновь сформированном списке"""
-	string_split = string.split(',')
-	count = 0
-	list_structure = []
-	for i in string_split:
-		count += 1
-		item = (len(i.split()))
-		if item < 2:
-			list_structure.append(i)
 
-		if item > 1:
-			for j in string_split[count - 1].split():
-				list_structure.append(j)
-	return list_structure
-
-
-for i in collection_additives.find():
-	additive = i['name']
-	# print(additive)
-	for j in collection_stucture.find():
-		content = j['content']
-		# print(content)
-		list_content = parses_content(content)
-		for k in list_content:
-			if k == additive:
-				print(f'Найдена добавка {additive}')
+# def parses_content(string):
+# 	"""Принимает строку и отдает отдельные элементы списка в виде одиночных слов во вновь сформированном списке"""
+# 	string_split = string.split(',')
+# 	count = 0
+# 	list_structure = []
+# 	for i in string_split:
+# 		count += 1
+# 		item = (len(i.split()))
+# 		if item < 2:
+# 			list_structure.append(i)
+#
+# 		if item > 1:
+# 			for j in string_split[count - 1].split():
+# 				list_structure.append(j)
+# 	return list_structure
+#
+#
+# for i in collection_additives.find():
+# 	additive = i['name']
+# 	# print(additive)
+# 	for j in collection_stucture.find():
+# 		content = j['content']
+# 		# print(content)
+# 		list_content = parses_content(content)
+# 		for k in list_content:
+# 			if k == additive:
+# 				print(f'Найдена добавка {additive}')
 
 
 # tmp_additive = 'Е220'

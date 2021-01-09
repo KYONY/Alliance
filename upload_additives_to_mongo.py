@@ -1,5 +1,8 @@
 import openpyxl
 import os
+
+from pymongo.errors import WriteError
+
 from mongo import collection_additives
 from pymongo import errors
 
@@ -28,6 +31,7 @@ def active_sheet(name_dir: str):
 	"""Получаем активную вкладку рабочей книги"""
 	return active_sheet
 
+#TODO Сделать доступ к файлу относительным!!!
 
 # additives_sheet = active_sheet(additives_dir)
 additives_sheet = 'Additives/Добавки_Additives.xlsx'
@@ -51,6 +55,7 @@ def upload_and_update_additives(document):
 	count = 0
 	for i, row in enumerate(sheet):
 		if i == 0:
+			"""учитываем надписи первой строки но не заносим ее в БД"""
 			titles = {}
 			for row_number, title in enumerate(row):
 				titles[title.value] = row_number
@@ -68,12 +73,13 @@ def upload_and_update_additives(document):
 				'keywords': additives.keyword
 			}
 
-			collection_additives.replace_one({"_id": additives.id}, query, upsert=True)
-			"""добавляем/обновляем данные в коллекции"""
-			print(query)
+			try:
+				collection_additives.replace_one({"additive": additives.additive}, query, upsert=True)
+				"""добавляем/обновляем данные в коллекции (обновляем по полю добавки)"""
+				print(query)
+			except (WriteError):
+				print(Exception(WriteError))
 
 
 if __name__ == '__main__':
-	# name_of_file(path=additives_dir)
-	# active_sheet(name_dir=additives_dir)
 	upload_and_update_additives(document=additives_sheet)
